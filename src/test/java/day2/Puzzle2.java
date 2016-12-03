@@ -1,8 +1,10 @@
 package day2;
 
 import java.util.List;
+
 import org.junit.Test;
 
+import static junit.framework.Assert.assertEquals;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -49,11 +51,13 @@ String input = "ULL\n" +
 
         List<Character> press = keypad.press(input);
 
-        assertThat(press.get(0), is('5'));
-        assertThat(press.get(1), is('D'));
-        assertThat(press.get(2), is('B'));
-        assertThat(press.get(3), is('3'));
+        assertEquals(press.get(0).charValue(), '5');
+        assertEquals(press.get(1).charValue(), 'D');
+        assertEquals(press.get(2).charValue(), 'B');
+        assertEquals(press.get(3).charValue(), '3');
     }
+
+
 
     @Test
     public void calculateFunkyExample() {

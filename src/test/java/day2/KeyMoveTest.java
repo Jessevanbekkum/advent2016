@@ -1,14 +1,15 @@
 package day2;
 
+
+
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class KeyMoveTest {
 
-    private void test(KeyMove m, int v, int e) {
-        assertThat(m.move.apply(v), is(e));
+    private void test(KeyMove m, int v, Integer e) {
+        assertEquals(m.move.apply(v), e);
     }
 
     @Test
