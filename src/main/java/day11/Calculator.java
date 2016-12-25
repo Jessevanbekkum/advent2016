@@ -20,15 +20,16 @@ public class Calculator {
             }
             counter++;
             if (current.isFinal()) {
-
                 System.out.println(current.getDistance());
                 minDistance = Math.min(current.getDistance(), minDistance);
                 break;
             }
-            work.addAll(
-                    current.generateNeighbours().stream()
-                            .filter(this::isCloserThanMin)
-                            .collect(Collectors.toSet()));
+            else {
+                work.addAll(
+                        current.generateNeighbours().stream()
+                                .filter(this::isCloserThanMin)
+                                .collect(Collectors.toSet()));
+            }
         }
     }
 

@@ -4,11 +4,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import org.junit.Before;
 import org.junit.Test;
 import com.google.common.collect.Sets;
 
 public class NodeTest {
-
+    @Before
+    public void init() {
+        NodeMemory.INSTANCE.allNodes.clear();
+    }
     /**
      * The first floor contains a hydrogen-compatible microchip and a lithium-compatible microchip.
      * The second floor contains a hydrogen generator.

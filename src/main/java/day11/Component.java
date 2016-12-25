@@ -31,10 +31,12 @@ public class Component implements Comparable<Component> {
         }
         boolean myGenerator =
                 floor.stream().anyMatch(comp -> comp.type == Type.Generator && comp.element.equals(this.element));
-
+        if (myGenerator) {
+            return true;
+        }
         boolean otherGenerator =
                 floor.stream().anyMatch(comp -> comp.type == Type.Generator && !comp.element.equals(this.element));
-        return !otherGenerator || myGenerator;
+        return !otherGenerator;
     }
 
     public String getElement() {

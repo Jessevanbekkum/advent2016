@@ -55,12 +55,12 @@ public class Node implements Comparable<Node> {
 
         Set<Set<Component>> sets = getMovableSets();
 
-        List<Node> moveUp = sets.stream()
+        List<Node> moveUp = sets.parallelStream()
                 .map(set -> generateNeighbour(set, 1))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
-        List<Node> moveDown = sets.stream()
+        List<Node> moveDown = sets.parallelStream()
                 .map(set -> generateNeighbour(set, -1))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -158,12 +158,16 @@ public class Node implements Comparable<Node> {
         return sb.toString();
     }
 
-    public boolean isValid() {
-        return inventory.values().stream().allMatch(this::isFloorSafe);
+    private boolean isValid() {
+        return inventory.values()
+                .stream()
+                .allMatch(this::isFloorSafe);
     }
 
     private boolean isFloorSafe(Set<Component> comps) {
-        return comps.stream().allMatch(comp -> comp.isSafe(comps));
+        return comps
+                .stream()
+                .allMatch(comp -> comp.isSafe(comps));
     }
 
     @Override
@@ -186,8 +190,8 @@ public class Node implements Comparable<Node> {
 
     @Override
     public int compareTo(final Node o) {
-        return ComparisonChain.start().compare(distance, o.distance).compare(score, o.score).result();
+//        return ComparisonChain.start().compare(distance, o.distance).compare(score, o.score).result();
 
-
+        return ComparisonChain.start().compare(score, o.score).compare(distance, o.distance).result();
     }
 }
