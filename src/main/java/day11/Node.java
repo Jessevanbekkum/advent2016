@@ -34,8 +34,8 @@ public class Node implements Comparable<Node> {
 
             ArrayList<Component> floorList = new ArrayList<>();
             result.put(floor.getKey(), floorList);
-            for (int i = 0; i < list.size() - 1; i++) {
-                if (Objects.equals(list.get(i).getElement(), list.get(i + 1).getElement())) {
+            for (int i = 0; i < list.size(); i++) {
+                if (i < list.size() - 1 && Objects.equals(list.get(i).getElement(), list.get(i + 1).getElement())) {
                     floorList.add(new Component("", Component.Type.Pair));
                     i++;
                 }
@@ -69,13 +69,13 @@ public class Node implements Comparable<Node> {
         return moveUp;
     }
 
-    private Optional<Node> generateNeighbour(final Set<Component> set, int move) {
+    private Optional<Node> generateNeighbour(final Set<Component> componentsToBring, int move) {
         int newElevator = elevatorPosition + move;
         if (newElevator == 5 || newElevator == 0) {
             return Optional.empty();
         }
         final Map<Integer, Set<Component>> newInventory =
-                calcNewInventory(elevatorPosition, newElevator, set);
+                calcNewInventory(elevatorPosition, newElevator, componentsToBring);
 
         Node newNode = new Node(newInventory, newElevator, distance + 1);
         if (!newNode.isValid()) {
@@ -102,10 +102,7 @@ public class Node implements Comparable<Node> {
     }
 
     private Set<Set<Component>> getMovableSets() {
-        Set<Set<Component>> powerSet = powerSet(inventory.get(elevatorPosition));
-
-        Set<Set<Component>> moves = powerSet.stream()
-                .collect(Collectors.toSet());
+        Set<Set<Component>> moves = powerSet(inventory.get(elevatorPosition));
 
         return removePairs(moves);
     }
@@ -136,11 +133,10 @@ public class Node implements Comparable<Node> {
 
     private static Set<Set<Component>> powerSet(Set<Component> originalSet) {
         Set<Set<Component>> sets = new HashSet<>();
-
+        originalSet.forEach(c -> sets.add(Collections.singleton(c)));
         originalSet.forEach(c1 ->
                 originalSet.forEach(c2 ->
                         sets.add(Sets.newHashSet(c1, c2))));
-
         return sets;
     }
 
