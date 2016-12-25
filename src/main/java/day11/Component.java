@@ -19,11 +19,14 @@ public class Component implements Comparable<Component> {
     }
 
     enum Type {
-        Generator, Microchip
+        Generator, Microchip, Pair
     }
 
     boolean isSafe(Set<Component> floor) {
         if (this.type == Type.Generator) {
+            return true;
+        }
+        if (this.type == Type.Pair) {
             return true;
         }
         boolean myGenerator =

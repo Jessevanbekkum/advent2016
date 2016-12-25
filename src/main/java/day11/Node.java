@@ -10,6 +10,7 @@ import com.google.common.collect.Sets;
 public class Node implements Comparable<Node> {
     private final NodeMemory memory = NodeMemory.INSTANCE;
     private final Map<Integer, Set<Component>> inventory;
+    private final Map<Integer, List<Component>> compressed;
     private final int score;
 
     private int elevatorPosition;
@@ -21,6 +22,29 @@ public class Node implements Comparable<Node> {
         this.elevatorPosition = elevatorPosition;
         this.distance = distance;
         this.score = inventory.get(1).size() * 3 + inventory.get(2).size() * 2 + inventory.get(3).size();
+        compressed = getCompressed(inventory);
+    }
+
+    private Map<Integer, List<Component>> getCompressed(final Map<Integer, Set<Component>> inventory) {
+        Map<Integer, List<Component>> result = new HashMap<>();
+        for (Map.Entry<Integer, Set<Component>> floor : inventory.entrySet()) {
+            List<Component> list = new ArrayList<>();
+            list.addAll(floor.getValue());
+            Collections.sort(list);
+
+            ArrayList<Component> floorList = new ArrayList<>();
+            result.put(floor.getKey(), floorList);
+            for (int i = 0; i < list.size() - 1; i++) {
+                if (Objects.equals(list.get(i).getElement(), list.get(i + 1).getElement())) {
+                    floorList.add(new Component("", Component.Type.Pair));
+                    i++;
+                }
+                else {
+                    floorList.add(list.get(i));
+                }
+            }
+        }
+        return result;
     }
 
     public boolean isFinal() {
@@ -152,7 +176,7 @@ public class Node implements Comparable<Node> {
         if (o == null || getClass() != o.getClass()) return false;
         final Node node = (Node) o;
         return elevatorPosition == node.elevatorPosition &&
-                Objects.equals(inventory, node.inventory);
+                Objects.equals(compressed, node.compressed);
     }
 
     @Override
