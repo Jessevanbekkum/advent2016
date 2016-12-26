@@ -23,7 +23,7 @@ public class FirewallTest {
 
     @Test
     public void shouldDoInput() throws URISyntaxException, IOException {
-        List<String> lines = Files.readAllLines(Paths.get(this.getClass().getResource("input.txt").toURI()));
+        List<String> lines = Files.readAllLines(Paths.get(this.getClass().getResource("day22/input.txt").toURI()));
         System.out.println(firewall.input(lines));
     }
 
@@ -35,7 +35,7 @@ public class FirewallTest {
     }
     @Test
     public void shouldDoInput2() throws URISyntaxException, IOException {
-        List<String> lines = Files.readAllLines(Paths.get(this.getClass().getResource("input.txt").toURI()));
+        List<String> lines = Files.readAllLines(Paths.get(this.getClass().getResource("day22/input.txt").toURI()));
         System.out.println(firewall.nrOfIps(lines));
     }
 }

@@ -20,7 +20,7 @@ public class CapsuleTest {
 
     @Test
     public void shouldDoInput() throws URISyntaxException, IOException {
-        List<String> strings = Files.readAllLines(Paths.get(this.getClass().getResource("input.txt").toURI()));
+        List<String> strings = Files.readAllLines(Paths.get(this.getClass().getResource("day22/input.txt").toURI()));
 
         Capsule capsule = new Capsule(strings);
         assertEquals(capsule.calculateTime(), 5);
