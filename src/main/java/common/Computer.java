@@ -1,8 +1,10 @@
 package common;
 
 import java.util.HashMap;
+import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,7 +12,7 @@ public class Computer {
 
     private Map<String, Integer> memory = new HashMap<>();
     private int pointer;
-    private List<String> instructions;
+    private List<String> code;
     private Pattern line = Pattern.compile("(\\w{3}) (\\S+) ?(\\S+)? ?(\\S+)?");
 
     private boolean[] toggles;
@@ -18,21 +20,25 @@ public class Computer {
 
     public Computer(List<String> instructions, Map<String, Integer> memory) {
         this.memory.putAll(memory);
-        this.instructions = instructions;
+        this.code = instructions;
         toggles = new boolean[instructions.size()];
         pointer = 0;
 
     }
 
+    Map<String, String> translate = new HashMap<>();
 
-
-//    List<String> improve(List<String> strings) {
-//
-//    }
+    {
+        translate.put("inc", "dec");
+        translate.put("dec", "inc");
+        translate.put("cpy", "jnz");
+        translate.put("jnz", "cpy");
+        translate.put("tgl", "inc");
+    }
 
     public int calculate() {
-        while (pointer < instructions.size()) {
-            executeLine(instructions.get(pointer));
+        while (pointer < code.size()) {
+            executeLine(code.get(pointer));
         }
         return memory.get("a");
     }
@@ -69,18 +75,20 @@ public class Computer {
     }
 
     void tgl(String register) {
-        System.out.println("tgl " + parseValue(register));
-        if (!toggling && toggles[pointer]) {
-            toggling = true;
-            inc(register);
+        int lineNumber = pointer + parseValue(register);
+        if (lineNumber >= code.size()) {
             return;
         }
-        toggling = false;
-
-        int toBeToggled = pointer + parseValue(register);
-        if (toBeToggled < toggles.length) {
-            toggles[toBeToggled] = !toggles[toBeToggled];
+        String s = code.get(lineNumber);
+        if (s.equals("jnz 0 0")) {
+            throw new RuntimeException("oeps");
         }
+        Matcher matcher = line.matcher(s);
+        matcher.find();
+        String command = matcher.group(1);
+
+        String t = s.replace(command, translate.get(command));
+        code.set(lineNumber, t);
     }
 
     private void jmp(String condition, String delta) {
@@ -113,7 +121,7 @@ public class Computer {
 
 
     void executeLine(String s) {
-        System.out.println(s);
+//        System.out.println(s);
         Matcher matcher = line.matcher(s);
 
         matcher.find();
@@ -121,6 +129,7 @@ public class Computer {
         String command = matcher.group(1);
         String op1 = matcher.group(2);
         String op2;
+        String op3;
         switch (command) {
             case "dec":
                 dec(op1);
@@ -146,13 +155,50 @@ public class Computer {
                 break;
             case "mul":
                 op2 = matcher.group(3);
-                String op3 = matcher.group(4);
+                op3 = matcher.group(4);
                 mul(op1, op2, op3);
                 pointer++;
                 break;
-
+            case "add":
+                op2 = matcher.group(3);
+                op3 = matcher.group(4);
+                add(op1, op2, op3);
+                pointer++;
+            case "div":
+                op2 = matcher.group(3);
+                op3 = matcher.group(4);
+                div(op1, op2, op3);
+                pointer++;
+            case "sub":
+                op2 = matcher.group(3);
+                op3 = matcher.group(4);
+                sub(op1, op2, op3);
+                pointer++;
+            case "out":
+                out(op1);
+                pointer++;
         }
     }
+
+    private void add(final String op1, final String as, final String bs) {
+        int a = parseValue(as);
+        int b = parseValue(bs);
+        memory.put(op1, a + b);
+    }
+
+
+    private void div(final String op1, final String as, final String bs) {
+        int a = parseValue(as);
+        int b = parseValue(bs);
+        memory.put(op1, a / b);
+    }
+
+    private void sub(final String op1, final String as, final String bs) {
+        int a = parseValue(as);
+        int b = parseValue(bs);
+        memory.put(op1, a - b);
+    }
+
 
     private void mul(final String op1, final String as, String bs) {
         int a = parseValue(as);
@@ -164,5 +210,19 @@ public class Computer {
         return memory.get(register);
     }
 
+    int outCounter=0;
+    int last=1;
 
+    public void out(String s) {
+        int i = parseValue(s);
+        System.out.println(i);
+        if (i > 1 || i < 0 || i == last) {
+            throw new IllegalStateException("Bunny");
+        }
+        last = i;
+        outCounter++;
+        if (outCounter>= 12) {
+            throw new UnsupportedOperationException("WHOHO");
+        }
+    }
 }

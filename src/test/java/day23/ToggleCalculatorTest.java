@@ -29,6 +29,14 @@ public class ToggleCalculatorTest {
 
     @Test
     public void doInput2() throws URISyntaxException, IOException {
+        List<String> strings = Files.readAllLines(Paths.get(this.getClass().getResource("input.txt").toURI()));
+        Integer calculate = ToggleCalculator.calculate(strings, Collections.singletonMap("a", 12));
+
+        assertEquals(Integer.valueOf(3), calculate);
+    }
+
+    @Test
+    public void doInput3() throws URISyntaxException, IOException {
         List<String> strings = Files.readAllLines(Paths.get(this.getClass().getResource("input2.txt").toURI()));
         Integer calculate = ToggleCalculator.calculate(strings, Collections.singletonMap("a", 12));
 

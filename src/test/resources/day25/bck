@@ -1,0 +1,30 @@
+cpy a d
+cpy 7 c
+cpy 362 b
+mul d b c
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+cpy d a
+jnz 0 0
+cpy a b
+cpy 0 a
+div c b 2
+add a a c
+jnz 1 6
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+cpy 2 b
+sub b b c
+jnz 1 4
+jnz 0 0
+jnz 0 0
+jnz 0 0
+jnz 0 0
+out b
+jnz a -19
+jnz 1 -21

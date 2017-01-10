@@ -75,7 +75,7 @@ public class WhiteElephantTest {
 
     @Test
     public void shouldDoExample2c() {
-        whiteElephant.calc2(150);
+        whiteElephant.calc2(50);
     }
 
     @Test

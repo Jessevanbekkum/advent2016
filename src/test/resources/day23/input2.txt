@@ -1,7 +1,8 @@
 cpy a b
 dec b
 cpy a d
-mul a c d
+cpy 0 a
+mul a b d
 jnz 0 0
 jnz 0 0
 jnz 0 0
@@ -10,15 +11,16 @@ jnz 0 0
 dec b
 cpy b c
 cpy c d
-dec d
-inc c
-jnz d -2
+add c c d
+cpy 0 d
+jnz 0 0
 tgl c
 cpy -16 c
 jnz 1 c
-mul a 73 79
-jnz 0 0
-jnz 0 0
-jnz 0 0
-jnz 0 0
-jnz 0 0
+cpy 73 c
+jnz 79 d
+inc a
+inc d
+jnz d -2
+inc c
+jnz c -5
