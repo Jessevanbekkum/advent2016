@@ -65,11 +65,36 @@ public class NodeTest {
 
         Calculator calculator = new Calculator();
         calculator.calculateDistance(start);
-
-
     }
 
+    /**
+     * The first floor contains a polonium generator, a thulium generator, a thulium-compatible microchip, a promethium generator, a ruthenium generator, a ruthenium-compatible microchip, a cobalt generator, and a cobalt-compatible microchip.
+     The second floor contains a polonium-compatible microchip and a promethium-compatible microchip.
+     The third floor contains nothing relevant.
+     The fourth floor contains nothing relevant.
+     */
+    @Test
+    public void shouldDoArnout() {
+        Map<Integer, Set<Component>> inventory = new HashMap<>();
+        inventory.put(1, Sets.newHashSet(
+                new Component("P", Component.Type.Generator),
+                new Component("T", Component.Type.Microchip),
+                new Component("T", Component.Type.Generator),
+                new Component("E", Component.Type.Generator),
+                new Component("E", Component.Type.Microchip),
+                new Component("D", Component.Type.Generator),
+                new Component("D", Component.Type.Microchip),
+                new Component("R", Component.Type.Generator)));
+        inventory.put(2, Sets.newHashSet(
+                new Component("P", Component.Type.Microchip),
+                new Component("R", Component.Type.Microchip)));
+        inventory.put(3, Collections.emptySet());
+        inventory.put(4, Collections.emptySet());
+        Node start = new Node(inventory, 1, 0);
 
+        Calculator calculator = new Calculator();
+        calculator.calculateDistance(start);
+    }
     @Test
     public void shouldDoInput2() {
         Map<Integer, Set<Component>> inventory = new HashMap<>();

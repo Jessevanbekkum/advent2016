@@ -48,6 +48,5 @@ public class Decompress {
             pos = matcher.end() + nrOfChars;
         }
         return length;
-
     }
 }
